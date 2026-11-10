@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ironman Dashboard 2027</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1018;color:#f5f7fa;font-family:Arial,sans-serif;padding:20px}
+header{display:flex;justify-content:space-between;align-items:center}
+h1{font-size:25px;margin:5px 0}
+h2{font-size:19px;margin:28px 0 14px}
+p{color:#9ba8b8;line-height:1.5}
+.tag{color:#ff7549;font-size:11px;letter-spacing:2px}
+.card,.metric{background:#151e2b;border:1px solid #283548;border-radius:15px;padding:18px;margin-top:13px}
+.hero{background:linear-gradient(135deg,#202e40,#111a27);padding:24px}
+.hero h2{font-size:27px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.metric small{color:#9ba8b8}
+.metric strong{display:block;font-size:24px;margin:9px 0}
+button{background:#fc6842;color:white;border:0;border-radius:10px;padding:14px;font-size:15px;font-weight:bold;width:100%;margin-top:12px}
+.secondary{background:#263548}
+.activity,.day{display:flex;justify-content:space-between;gap:10px;padding:13px 0;border-bottom:1px solid #293547}
+.activity:last-child,.day:last-child{border:0}
+.muted{color:#9ba8b8;font-size:13px}
+textarea{width:100%;background:#0b1018;color:white;border:1px solid #34445a;border-radius:10px;padding:12px;margin-top:10px}
+footer{text-align:center;color:#748195;font-size:12px;margin:30px 0}
+</style>
+</head>
+<body>
+
+<header>
+<div>
+<div class="tag">PERSONAL TRAINING CENTER</div>
+<h1>IRONMAN 70.3</h1>
+</div>
+<div>🏁 2027</div>
+</header>
+
+<section class="card hero">
+<div class="tag">THE ROAD TO JÖNKÖPING</div>
+<h2>Your Ironman Journey</h2>
+<p>Swim. Bike. Run. Become stronger.</p>
+<p>Din personliga träningsdashboard inför Ironman Jönköping 2027.</p>
+</section>
+
+<h2>📊 Träningsöversikt</h2>
+<div class="grid">
+<div class="metric"><small>🏊 SIMNING</small><strong id="swim">0 km</strong><small>Totalt</small></div>
+<div class="metric"><small>🚴 CYKLING</small><strong id="bike">0 km</strong><small>Totalt</small></div>
+<div class="metric"><small>🏃 LÖPNING</small><strong id="run">0 km</strong><small>Totalt</small></div>
+<div class="metric"><small>⏱ TRÄNINGSTID</small><strong id="hours">0 h</strong><small>Totalt</small></div>
+</div>
+
+<h2>🔗 Strava</h2>
+<section class="card">
+<strong>Anslut ditt Strava-konto</strong>
+<p id="stravaStatus">Inte anslutet ännu.</p>
+<button onclick="location.href='/api/strava/auth'">Anslut Strava</button>
+</section>
+
+<h2>📅 Mitt träningsschema</h2>
+<section class="card">
+<div class="activity"><strong>Veckans plan</strong><span class="muted">Ironman 2027</span></div>
+<div class="day"><span>🏊 Simning</span><span>Enligt schema</span></div>
+<div class="day"><span>🚴 Cykling</span><span>Enligt schema</span></div>
+<div class="day"><span>🏃 Löpning</span><span>Enligt schema</span></div>
+<div class="day"><span>🏋️ Styrka</span><span>Enligt schema</span></div>
+<p>Här kommer ditt kompletta dagliga schema med distanser, tider, intensitet och övningar.</p>
+</section>
+
+<h2>🧠 Automatisk träningsanalys</h2>
+<section class="card">
+<strong>Din personliga träningscoach</strong>
+<p id="analysis">När dina träningspass har hämtats från Strava analyserar coachen din prestation, puls, tempo, belastning och utveckling.</p>
+</section>
+
+<h2>💬 Fråga din coach</h2>
+<section class="card">
+<p>Ställ frågor om din träning och utveckling.</p>
+<textarea id="coachQuestion" rows="3" placeholder="Exempel: Hur ska jag förbättra min löpning?"></textarea>
+<button onclick="askCoach()">Fråga coachen</button>
+<p id="coachAnswer">Din personliga coach är redo när analysfunktionen är ansluten.</p>
+</section>
+
+<h2>🎯 Ironman 70.3 Jönköping</h2>
+<section class="card">
+<div class="activity"><span>🏊 Simning</span><strong>1,9 km</strong></div>
+<div class="activity"><span>🚴 Cykling</span><strong>90 km</strong></div>
+<div class="activity"><span>🏃 Löpning</span><strong>21,1 km</strong></div>
+</section>
+
+<footer>IRONMAN DASHBOARD · ROAD TO 2027</footer>
+
+<script>
+function askCoach(){
+const question=document.getElementById("coachQuestion").value.trim();
+if(!question)return;
+document.getElementById("coachAnswer").textContent=
+"Coachfunktionen aktiveras när AI-integrationen är installerad.";
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090d18">
+<title>Ironman Journey 2027</title>
+<style>
+:root{--bg:#090d18;--panel:#111827;--panel2:#172235;--line:#263449;--text:#f4f6fb;--muted:#8d9bb0;--orange:#ff7138;--green:#45d6a0;--blue:#5b9cff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
+button,textarea{font:inherit}
+button{cursor:pointer}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:235px;background:#0d1422;border-right:1px solid var(--line);padding:25px 17px;display:flex;flex-direction:column;flex-shrink:0}
+.logo{font-size:18px;font-weight:900;letter-spacing:1px}.logo span{color:var(--orange)}.logo small{display:block;color:var(--muted);font-size:10px;letter-spacing:2px;margin-top:6px}
+.nav{margin-top:38px;display:grid;gap:8px}
+.nav button{text-align:left;background:transparent;color:var(--muted);border:0;padding:13px;border-radius:9px}
+.nav button.active,.nav button:hover{background:#202b3e;color:white}.nav button.active{border-left:3px solid var(--orange)}
+.sidebar-bottom{margin-top:auto;color:var(--muted);font-size:12px;line-height:1.7}
+main{flex:1;min-width:0;padding:30px;max-width:1550px;margin:auto;width:100%}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px}
+.eyebrow{color:var(--orange);font-size:11px;font-weight:bold;letter-spacing:2px;text-transform:uppercase}
+h1{font-size:28px;margin:8px 0 0}h2{font-size:18px;margin:0 0 15px}h3{font-size:15px;margin:0 0 8px}
+.muted{color:var(--muted)}.small{font-size:12px}.orange{color:var(--orange)}.green{color:var(--green)}.blue{color:var(--blue)}
+.button{border:0;border-radius:9px;padding:11px 15px;font-weight:bold;background:var(--orange);color:#101725}
+.button.secondary{background:#202d42;color:white;border:1px solid var(--line)}
+.grid{display:grid;gap:15px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:17px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:19px;min-width:0}
+.stat-label{font-size:11px;color:var(--muted);letter-spacing:1px}.stat-value{font-size:26px;font-weight:850;margin:10px 0 5px}.stat-note{font-size:11px;color:var(--muted)}
+.two-col{grid-template-columns:minmax(0,1.4fr) minmax(260px,1fr)}.three-col{grid-template-columns:repeat(3,minmax(0,1fr))}
+.section{display:none}.section.active{display:block}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:22px 0 14px}
+.race-card{background:linear-gradient(120deg,#291c1b,#151c2a 75%);border:1px solid #58372d;border-radius:14px;padding:22px;margin-bottom:17px}
+.race-card strong{font-size:21px}.race-bottom{display:flex;justify-content:space-between;gap:10px;margin-top:16px;flex-wrap:wrap}
+.day-list{display:grid;gap:9px}.day{display:grid;grid-template-columns:85px 1fr auto;align-items:center;gap:12px;padding:13px;background:var(--panel2);border:1px solid var(--line);border-radius:10px}
+.day-name{font-size:12px;font-weight:bold}.day-type{font-size:13px}.day-detail{font-size:11px;color:var(--muted);margin-top:5px}
+.tag{font-size:10px;padding:5px 8px;border-radius:20px;background:#263449;white-space:nowrap}
+.tag.swim{color:#79baff;background:#142b49}.tag.bike{color:#ffbd77;background:#39291d}.tag.run{color:#61dfad;background:#15372f}.tag.gym{color:#d0a6ff;background:#302343}.tag.rest{color:var(--muted)}
+.week-controls{display:flex;align-items:center;gap:9px}.week-controls button{background:var(--panel2);border:1px solid var(--line);color:white;border-radius:8px;padding:8px 12px}
+.activity{padding:13px 0;border-bottom:1px solid var(--line)}.activity:last-child{border:0}
+.activity-top{display:flex;justify-content:space-between;gap:10px;font-size:13px}
+.activity-stats{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;font-size:11px;color:var(--muted)}
+.notice{padding:12px;border-radius:9px;background:#172235;color:var(--muted);font-size:12px;line-height:1.6}
+textarea{width:100%;background:#0b1220;border:1px solid var(--line);border-radius:9px;padding:12px;color:white;min-height:105px;resize:vertical}
+#coachAnswer{white-space:pre-wrap;line-height:1.7;font-size:13px;margin-top:15px}
+.metric-row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px}
+.empty{color:var(--muted);font-size:13px;padding:15px 0}
+#message{margin-top:12px;font-size:12px;color:var(--muted)}
+@media(max-width:850px){.sidebar{width:195px}main{padding:22px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.two-col{grid-template-columns:1fr}}
+@media(max-width:620px){.layout{display:block}.sidebar{width:100%;padding:15px;border-right:0;border-bottom:1px solid var(--line)}.logo small{display:none}.nav{display:flex;overflow-x:auto;margin-top:13px;gap:4px}.nav button{white-space:nowrap;padding:10px;font-size:12px}.sidebar-bottom{display:none}main{padding:18px 13px}h1{font-size:23px}.card{padding:14px}.day{grid-template-columns:60px 1fr;gap:8px}.day .tag{grid-column:2;justify-self:start}.section-head{align-items:flex-start;flex-direction:column}.three-col{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="logo">IRONMAN<span> JOURNEY</span><small>PERSONAL TRAINING CENTER</small></div>
+  <nav class="nav">
+    <button class="active" data-page="overview">◈ Översikt</button>
+    <button data-page="schedule">▦ Träningsschema</button>
+    <button data-page="activities">⌁ Träningspass</button>
+    <button data-page="coach">✦ AI-coach</button>
+    <button data-page="progress">↗ Utveckling</button>
+  </nav>
+  <div class="sidebar-bottom">IRONMAN 70.3 JÖNKÖPING<br><span class="orange">MÅL: 2027</span></div>
+</aside>
+<main>
+<header class="topbar">
+  <div><div class="eyebrow">Din personliga träningscentral</div><h1 id="pageTitle">Din Ironman-resa</h1></div>
+  <button class="button" id="stravaButton">↗ Anslut Strava</button>
+</header>
+
+<section class="section active" id="overview">
+  <div class="race-card">
+    <div class="eyebrow">Nästa stora mål</div>
+    <strong>IRONMAN 70.3 JÖNKÖPING 2027</strong>
+    <div class="muted small" style="margin-top:7px">Simning · Cykling · Löpning</div>
+    <div class="race-bottom"><span class="small">Din resa mot mållinjen börjar här.</span><span class="orange small">MÅL: 5:30</span></div>
+  </div>
+  <div class="grid stats">
+    <div class="card"><div class="stat-label">IMPORTERADE PASS</div><div class="stat-value" id="statActivities">–</div><div class="stat-note">Senaste 30 från Strava</div></div>
+    <div class="card"><div class="stat-label">TOTAL DISTANS</div><div class="stat-value" id="statDistance">–</div><div class="stat-note">Senaste importerade pass</div></div>
+    <div class="card"><div class="stat-label">TRÄNINGSTID</div><div class="stat-value" id="statTime">–</div><div class="stat-note">Senaste importerade pass</div></div>
+    <div class="card"><div class="stat-label">SPORTER</div><div class="stat-value" id="statSports">0/3</div><div class="stat-note">Simning · Cykling · Löpning</div></div>
+  </div>
+  <div class="grid two-col">
+    <div class="card"><div class="section-head" style="margin-top:0"><h2>Veckans schema</h2><button class="button secondary" data-goto="schedule">Visa schema</button></div><div id="overviewSchedule" class="day-list"></div></div>
+    <div class="card"><h2>Senaste träningspassen</h2><div id="overviewActivities" class="empty">Anslut Strava för att hämta dina träningspass.</div></div>
+  </div>
+</section>
+
+<section class="section" id="schedule">
+  <div class="section-head"><div><div class="eyebrow">Planering</div><h2>Mitt träningsschema</h2></div><div class="week-controls"><button id="prevWeek">←</button><span id="weekLabel" class="small">Vecka 1</span><button id="nextWeek">→</button></div></div>
+  <div class="card">
+    <div class="notice">Detta är ett redigerbart grundexempel för planeringsvyn, inte ett färdigt individuellt träningsprogram. Anpassa belastningen efter din träningsplan och återhämtning.</div>
+    <div id="fullSchedule" class="day-list" style="margin-top:15px"></div>
+  </div>
+</section>
+
+<section class="section" id="activities">
+  <div class="section-head"><div><div class="eyebrow">Strava-integration</div><h2>Mina träningspass</h2></div><button class="button secondary" id="refreshActivities">↻ Uppdatera</button></div>
+  <div class="card"><div id="activityList" class="empty">Anslut Strava för att hämta dina träningspass.</div><div id="message"></div></div>
+</section>
+
+<section class="section" id="coach">
+  <div class="eyebrow">Personlig träningsanalys</div><h2 style="margin-top:7px">Din AI-coach</h2>
+  <div class="grid two-col">
+    <div class="card">
+      <h3>✦ Fråga din coach</h3>
+      <p class="muted small">Få feedback på träningspassen, belastning och utveckling inför tävlingen.</p>
+      <textarea id="coachQuestion" placeholder="Exempel: Analysera mina senaste pass. Vad gör jag bra och vad behöver jag förbättra?"></textarea>
+      <button class="button" id="askCoach" style="margin-top:12px;width:100%">Analysera mina pass</button>
+      <div id="coachAnswer"></div>
+    </div>
+    <div class="card">
+      <h3>Vad coachen hjälper dig med</h3>
+      <div class="metric-row"><span>Träningsanalys</span><span class="green">Pass</span></div>
+      <div class="metric-row"><span>Intensitet och återhämtning</span><span class="green">Belastning</span></div>
+      <div class="metric-row"><span>Utveckling inom tre grenar</span><span class="green">Triathlon</span></div>
+      <div class="metric-row"><span>Förslag på förbättringar</span><span class="green">Feedback</span></div>
+      <div class="notice" style="margin-top:14px">AI-coachen aktiveras när backend och OpenAI-nyckeln är konfigurerade.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="progress">
+  <div class="eyebrow">Din utveckling</div><h2 style="margin-top:7px">Träningsstatistik</h2>
+  <div class="grid three-col">
+    <div class="card"><h3 class="blue">SIMNING</h3><div class="stat-value" id="swimDistance">0 km</div><div class="stat-note">Importerad distans</div></div>
+    <div class="card"><h3 class="orange">CYKLING</h3><div class="stat-value" id="bikeDistance">0 km</div><div class="stat-note">Importerad distans</div></div>
+    <div class="card"><h3 class="green">LÖPNING</h3><div class="stat-value" id="runDistance">0 km</div><div class="stat-note">Importerad distans</div></div>
+  </div>
+  <div class="card" style="margin-top:15px"><h3>Sammanfattning</h3><div id="progressSummary" class="empty">Dina siffror visas när du har anslutit Strava.</div></div>
+</section>
+</main>
+</div>
+
+<script>
+const weeks=[
+[
+["Måndag","Löpning","45 min lugnt distanspass","run"],
+["Tisdag","Simning","Teknik och vattenvana 30–40 min","swim"],
+["Onsdag","Cykling","60 min lugn cykling","bike"],
+["Torsdag","Styrka","Helkropp och bål 40 min","gym"],
+["Fredag","Vila","Återhämtning","rest"],
+["Lördag","Cykling","Långpass i lugnt tempo","bike"],
+["Söndag","Löpning","Lugnt distanspass","run"]
+],
+[
+["Måndag","Vila","Återhämtning","rest"],
+["Tisdag","Löpning","Intervaller efter dagsform","run"],
+["Onsdag","Simning","Teknik och uthållighet","swim"],
+["Torsdag","Cykling","Distans med jämn ansträngning","bike"],
+["Fredag","Styrka","Helkropp och bål","gym"],
+["Lördag","Cykling","Långpass i lugnt tempo","bike"],
+["Söndag","Löpning","Lugn distans","run"]
+]];
+let weekIndex=0;
+let activities=[];
+
+function renderDays(id,days){
+ document.getElementById(id).innerHTML=days.map(d=>`<div class="day"><div class="day-name">${d[0]}</div><div><div class="day-type">${d[1]}</div><div class="day-detail">${d[2]}</div></div><span class="tag ${d[3]}">${d[1]}</span></div>`).join("");
+}
+function renderSchedule(){
+ renderDays("fullSchedule",weeks[weekIndex%weeks.length]);
+ document.getElementById("weekLabel").textContent="Vecka "+(weekIndex+1);
+}
+renderDays("overviewSchedule",weeks[0]);renderSchedule();
+
+function showPage(page){
+ document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+ document.getElementById(page).classList.add("active");
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+ const titles={overview:"Din Ironman-resa",schedule:"Träningsschema",activities:"Mina träningspass",coach:"Din AI-coach",progress:"Din utveckling"};
+ document.getElementById("pageTitle").textContent=titles[page];
+}
+document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+document.querySelectorAll("[data-goto]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.goto)));
+document.getElementById("prevWeek").onclick=()=>{weekIndex=Math.max(0,weekIndex-1);renderSchedule()};
+document.getElementById("nextWeek").onclick=()=>{weekIndex++;renderSchedule()};
+
+function sport(a){
+ const t=(a.sport_type||a.type||"").toLowerCase();
+ if(t.includes("swim"))return "Simning";
+ if(t.includes("ride")||t.includes("cycle")||t.includes("virtual"))return "Cykling";
+ if(t.includes("run"))return "Löpning";
+ return a.sport_type||a.type||"Träning";
+}
+function duration(s){
+ const h=Math.floor(s/3600),m=Math.floor((s%3600)/60);
+ return h?h+" h "+m+" min":m+" min";
+}
+function activityHTML(a){
+ const km=(Number(a.distance||0)/1000).toFixed(2);
+ const date=a.start_date_local?new Date(a.start_date_local).toLocaleDateString("sv-SE"):"";
+ const pace=a.average_speed&&sport(a)==="Löpning"?(1000/a.average_speed/60).toFixed(2)+" min/km":null;
+ return `<div class="activity"><div class="activity-top"><strong>${escapeHTML(a.name||sport(a))}</strong><span class="muted small">${date}</span></div><div class="activity-stats"><span>${sport(a)}</span><span>${km} km</span><span>${duration(Number(a.moving_time||0))}</span>${pace?`<span>${pace} min/km</span>`:""}${a.average_heartrate?`<span>${Math.round(a.average_heartrate)} bpm</span>`:""}${a.average_watts?`<span>${Math.round(a.average_watts)} W</span>`:""}</div></div>`;
+}
+function escapeHTML(s){
+ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function updateDashboard(){
+ const totalDistance=activities.reduce((n,a)=>n+Number(a.distance||0),0)/1000;
+ const totalTime=activities.reduce((n,a)=>n+Number(a.moving_time||0),0);
+ const types=new Set(activities.map(sport));
+ document.getElementById("statActivities").textContent=activities.length;
+ document.getElementById("statDistance").textContent=totalDistance.toFixed(1)+" km";
+ document.getElementById("statTime").textContent=duration(totalTime);
+ document.getElementById("statSports").textContent=["Simning","Cykling","Löpning"].filter(x=>types.has(x)).length+"/3";
+ document.getElementById("activityList").innerHTML=activities.length?activities.map(activityHTML).join(""):"Inga träningspass hittades.";
+ document.getElementById("overviewActivities").innerHTML=activities.length?activities.slice(0,4).map(activityHTML).join(""):"Inga träningspass hittades.";
+ const sums={Simning:0,Cykling:0,Löpning:0};
+ activities.forEach(a=>{const s=sport(a);if(sums[s]!==undefined)sums[s]+=Number(a.distance||0)/1000});
+ document.getElementById("swimDistance").textContent=sums.Simning.toFixed(1)+" km";
+ document.getElementById("bikeDistance").textContent=sums.Cykling.toFixed(1)+" km";
+ document.getElementById("runDistance").textContent=sums.Löpning.toFixed(1)+" km";
+ document.getElementById("progressSummary").textContent="Du har importerat "+activities.length+" pass. Totalt "+totalDistance.toFixed(1)+" km och "+duration(totalTime)+". Statistiken gäller de importerade passen.";
+}
+async function loadActivities(){
+ const msg=document.getElementById("message");
+ msg.textContent="Hämtar träningspass...";
+ try{
+  const res=await fetch("/api/strava/activities");
+  if(res.status===401){msg.textContent="Anslut Strava först.";return}
+  if(!res.ok)throw new Error("Serverfel: "+res.status);
+  const data=await res.json();
+  activities=Array.isArray(data)?data:(data.activities||[]);
+  updateDashboard();
+  msg.textContent="Uppdaterat. "+activities.length+" pass hämtade.";
+ }catch(e){msg.textContent="Kunde inte hämta pass ännu. Kontrollera att Strava-backend är installerad och driftsatt."}
+}
+document.getElementById("stravaButton").onclick=()=>{window.location.href="/api/strava/auth"};
+document.getElementById("refreshActivities").onclick=loadActivities;
+document.getElementById("askCoach").onclick=async()=>{
+ const answer=document.getElementById("coachAnswer");
+ const question=document.getElementById("coachQuestion").value.trim();
+ if(!question){answer.textContent="Skriv en fråga till coachen först.";return}
+ answer.textContent="Analyserar dina träningspass...";
+ try{
+  const res=await fetch("/api/coach",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question,activities})});
+  const data=await res.json();
+  if(!res.ok)throw new Error(data.error||"Kunde inte nå coachen.");
+  answer.textContent=data.feedback||data.answer||data.output_text||"Inget svar mottogs.";
+ }catch(e){answer.textContent="AI-coachen är inte aktiverad ännu. Kontrollera backend och API-nyckel i Vercel."}
+};
+if(new URLSearchParams(location.search).get("connected")==="1"){
+ showPage("activities");
+ loadActivities();
+}else{
+ loadActivities();
+}
+</script>
+</body>
+</html>

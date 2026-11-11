@@ -83,6 +83,14 @@ textarea{width:100%;background:#0b1220;border:1px solid var(--line);border-radiu
     <div class="card"><div class="stat-label">TOTAL DISTANS</div><div class="stat-value" id="statDistance">–</div><div class="stat-note">Senaste importerade pass</div></div>
     <div class="card"><div class="stat-label">TRÄNINGSTID</div><div class="stat-value" id="statTime">–</div><div class="stat-note">Senaste importerade pass</div></div>
     <div class="card"><div class="stat-label">SPORTER</div><div class="stat-value" id="statSports">0/3</div><div class="stat-note">Simning · Cykling · Löpning</div></div>
+    <div class="card">
+  <div class="stat-label">Kalorier</div>
+  <div class="stat-value" id="statCalories">0 kcal</div>
+</div>
+<div class="card">
+  <div class="stat-label">Höjdmeter</div>
+  <div class="stat-value" id="statElevation">0 m</div>
+</div>
   </div>
   <div class="grid two-col">
     <div class="card"><div class="section-head" style="margin-top:0"><h2>Veckans schema</h2><button class="button secondary" data-goto="schedule">Visa schema</button></div><div id="overviewSchedule" class="day-list"></div></div>
@@ -261,12 +269,16 @@ function escapeHTML(s){
 function updateDashboard(){
  const totalDistance=activities.reduce((n,a)=>n+Number(a.distance||0),0)/1000;
  const totalTime=activities.reduce((n,a)=>n+Number(a.moving_time||0),0);
+  const totalCalories = activities.reduce((n,a) => n + Number(a.calories || 0), 0);
+const totalElevation = activities.reduce((n,a) => n + Number(a.total_elevation_gain || 0), 0);
  const types=new Set(activities.map(sport));
  document.getElementById("statActivities").textContent=activities.length;
  document.getElementById("statDistance").textContent=totalDistance.toFixed(1)+" km";
  document.getElementById("statTime").textContent=duration(totalTime);
+  document.getElementById("statCalories").textContent = Math.round(totalCalories).toLocaleString("sv-SE") + " kcal";
+document.getElementById("statElevation").textContent = Math.round(totalElevation).toLocaleString("sv-SE") + " m";
  document.getElementById("statSports").textContent=["Simning","Cykling","Löpning"].filter(x=>types.has(x)).length+"/3";
- document.getElementById("activityList").innerHTML=activities.length?activities.map(activityHTML).join(""):"Inga träningspass hittades.";
+ document.getElementById("activityList").innerHTML=activities.length?activities.map(activityHTML).join(""):"Inga träningspass hittades.";d 
  document.getElementById("overviewActivities").innerHTML=activities.length?activities.slice(0,4).map(activityHTML).join(""):"Inga träningspass hittades.";
  const sums={Simning:0,Cykling:0,Löpning:0};
  activities.forEach(a=>{const s=sport(a);if(sums[s]!==undefined)sums[s]+=Number(a.distance||0)/1000});

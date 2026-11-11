@@ -132,7 +132,7 @@ textarea{width:100%;background:#0b1220;border:1px solid var(--line);border-radiu
     <div class="card"><h3 class="green">LÖPNING</h3><div class="stat-value" id="runDistance">0 km</div><div class="stat-note">Importerad distans</div></div>
   </div>
   <div class="card" style="margin-top:15px"><h3>Sammanfattning</h3><div id="progressSummary" class="empty">Dina siffror visas när du har anslutit Strava.</div></div>
-</<div class="card" style="margin-top:15px">
+<div class="card" style="margin-top:15px">
   <h3>Veckorapport</h3>
   <div class="grid three-col" style="margin-top:15px">
     <div class="card">
@@ -150,6 +150,15 @@ textarea{width:100%;background:#0b1220;border:1px solid var(--line);border-radiu
   </div>
   <p>Antal pass: <strong id="weekCount">0</strong></p>
   <p>Total träningstid: <strong id="weekTime">0 min</strong></p>
+</div>
+  <div class="card" style="margin-top:15px">
+  <h3>Träningsbelastning – senaste 8 veckorna</h3>
+  <p style="color:var(--muted);font-size:13px">
+    Total träningstid per vecka
+  </p>
+  <div id="trainingLoadChart" style="margin-top:20px">
+    <p>Inväntar träningsdata...</p>
+  </div>
 </div>
 </section>
 </main>

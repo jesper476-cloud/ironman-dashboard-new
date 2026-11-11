@@ -240,13 +240,19 @@ function activityHTML(a){
     a.max_watts != null ? `Maxeffekt: ${Math.round(a.max_watts)} W` : null
   ].filter(Boolean).join(" · ");
 
-  return `<div class="activity">
+  
+return `<details class="activity">
+  <summary style="cursor:pointer">
     <div class="activity-main">
       <strong>${escapeHTML(a.name || type)}</strong>
       <span>${date} · ${km} km · ${duration(a.elapsed_time || 0)}</span>
-      <small>${details || "Ingen extra träningsdata tillgänglig"}</small>
     </div>
-  </div>`;
+  </summary>
+  <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border)">
+    ${details || "Ingen extra träningsdata tillgänglig"}
+  </div>
+</details>`;
+
 }
 
 function escapeHTML(s){

@@ -132,6 +132,25 @@ textarea{width:100%;background:#0b1220;border:1px solid var(--line);border-radiu
     <div class="card"><h3 class="green">LÖPNING</h3><div class="stat-value" id="runDistance">0 km</div><div class="stat-note">Importerad distans</div></div>
   </div>
   <div class="card" style="margin-top:15px"><h3>Sammanfattning</h3><div id="progressSummary" class="empty">Dina siffror visas när du har anslutit Strava.</div></div>
+</<div class="card" style="margin-top:15px">
+  <h3>Veckorapport</h3>
+  <div class="grid three-col" style="margin-top:15px">
+    <div class="card">
+      <h3 class="blue">SIMNING</h3>
+      <strong id="weekSwim">0 km</strong>
+    </div>
+    <div class="card">
+      <h3 class="orange">CYKLING</h3>
+      <strong id="weekBike">0 km</strong>
+    </div>
+    <div class="card">
+      <h3 class="green">LÖPNING</h3>
+      <strong id="weekRun">0 km</strong>
+    </div>
+  </div>
+  <p>Antal pass: <strong id="weekCount">0</strong></p>
+  <p>Total träningstid: <strong id="weekTime">0 min</strong></p>
+</div>
 </section>
 </main>
 </div>
@@ -216,6 +235,48 @@ function updateDashboard(){
  document.getElementById("bikeDistance").textContent=sums.Cykling.toFixed(1)+" km";
  document.getElementById("runDistance").textContent=sums.Löpning.toFixed(1)+" km";
  document.getElementById("progressSummary").textContent="Du har importerat "+activities.length+" pass. Totalt "+totalDistance.toFixed(1)+" km och "+duration(totalTime)+". Statistiken gäller de importerade passen.";
+    // Veckorapport från Strava
+  const now = new Date();
+  const monday = new Date(now);
+  monday.setHours(0,0,0,0);
+  monday.setDate(now.getDate() - ((now.getDay()+6)%7));
+
+  const weekly = {
+    Simning: {distance:0, time:0, count:0},
+    Cykling: {distance:0, time:0, count:0},
+    Löpning: {distance:0, time:0, count:0}
+  };
+
+  activities.forEach(a => {
+    const date = new Date(a.start_date_local || a.start_date);
+    if (date < monday || date > now) return;
+
+    const type = sport(a);
+    const key = Object.keys(weekly).find(k => type.includes(k));
+
+    if (!key) return;
+
+    weekly[key].distance += Number(a.distance || 0);
+    weekly[key].time += Number(a.elapsed_time || 0);
+    weekly[key].count++;
+  });
+
+  const km = n => (n / 1000).toFixed(1) + " km";
+
+  document.getElementById("weekSwim").textContent =
+    km(weekly.Simning.distance);
+  document.getElementById("weekBike").textContent =
+    km(weekly.Cykling.distance);
+  document.getElementById("weekRun").textContent =
+    km(weekly.Löpning.distance);
+
+  document.getElementById("weekCount").textContent =
+    Object.values(weekly).reduce((n,s) => n+s.count,0);
+
+  const seconds = Object.values(weekly).reduce((n,s) => n+s.time,0);
+  document.getElementById("weekTime").textContent =
+    Math.floor(seconds/3600) + " h " +
+    Math.floor((seconds%3600)/60) + " min";
 }
 async function loadActivities(){
  const msg=document.getElementById("message");

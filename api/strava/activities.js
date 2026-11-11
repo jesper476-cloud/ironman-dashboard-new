@@ -87,7 +87,7 @@ module.exports = async function handler(req, res) {
     }
 
     const activityResponse = await fetch(
-      "https://www.strava.com/api/v3/athlete/activities?per_page=30&page=1",
+      "https://www.strava.com/api/v3/athlete/activities?per_page=100&page=1",
       {
         headers: {
           Authorization: `Bearer ${tokens.access_token}`

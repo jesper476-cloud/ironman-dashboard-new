@@ -219,12 +219,36 @@ function duration(s){
  const h=Math.floor(s/3600),m=Math.floor((s%3600)/60);
  return h?h+" h "+m+" min":m+" min";
 }
+
 function activityHTML(a){
- const km=(Number(a.distance||0)/1000).toFixed(2);
- const date=a.start_date_local?new Date(a.start_date_local).toLocaleDateString("sv-SE"):"";
- const pace=a.average_speed&&sport(a)==="Löpning"?(1000/a.average_speed/60).toFixed(2)+" min/km":null;
- return `<div class="activity"><div class="activity-top"><strong>${escapeHTML(a.name||sport(a))}</strong><span class="muted small">${date}</span></div><div class="activity-stats"><span>${sport(a)}</span><span>${km} km</span><span>${duration(Number(a.moving_time||0))}</span>${pace?`<span>${pace} min/km</span>`:""}${a.average_heartrate?`<span>${Math.round(a.average_heartrate)} bpm</span>`:""}${a.average_watts?`<span>${Math.round(a.average_watts)} W</span>`:""}</div></div>`;
+  const km = (Number(a.distance || 0) / 1000).toFixed(1);
+  const date = a.start_date_local
+    ? new Date(a.start_date_local).toLocaleDateString("sv-SE")
+    : "";
+
+  const type = sport(a);
+  const pace = a.average_speed && type === "Löpning"
+    ? (1000 / a.average_speed / 60).toFixed(2)
+    : "";
+
+  const details = [
+    `Höjdmeter: ${Math.round(a.total_elevation_gain || 0)} m`,
+    a.calories != null ? `Kalorier: ${Math.round(a.calories)} kcal` : null,
+    a.average_heartrate != null ? `Snittpuls: ${Math.round(a.average_heartrate)} bpm` : null,
+    a.max_heartrate != null ? `Maxpuls: ${Math.round(a.max_heartrate)} bpm` : null,
+    a.average_watts != null ? `Snitteffekt: ${Math.round(a.average_watts)} W` : null,
+    a.max_watts != null ? `Maxeffekt: ${Math.round(a.max_watts)} W` : null
+  ].filter(Boolean).join(" · ");
+
+  return `<div class="activity">
+    <div class="activity-main">
+      <strong>${escapeHTML(a.name || type)}</strong>
+      <span>${date} · ${km} km · ${duration(a.elapsed_time || 0)}</span>
+      <small>${details || "Ingen extra träningsdata tillgänglig"}</small>
+    </div>
+  </div>`;
 }
+
 function escapeHTML(s){
  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }

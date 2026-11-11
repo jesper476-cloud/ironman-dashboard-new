@@ -286,6 +286,60 @@ function updateDashboard(){
   document.getElementById("weekTime").textContent =
     Math.floor(seconds/3600) + " h " +
     Math.floor((seconds%3600)/60) + " min";
+  
+  // Träningstid per vecka – senaste 8 veckorna
+  const chart = document.getElementById("trainingLoadChart");
+  const today = new Date();
+  const currentMonday = new Date(today);
+  currentMonday.setHours(0, 0, 0, 0);
+  currentMonday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
+
+  const chartWeeks = [];
+
+  for (let i = 7; i >= 0; i--) {
+    const start = new Date(currentMonday);
+    start.setDate(start.getDate() - i * 7);
+    chartWeeks.push({ start, seconds: 0 });
+  }
+
+  activities.forEach(a => {
+    if (!a.start_date_local) return;
+
+    const date = new Date(a.start_date_local);
+    date.setHours(0, 0, 0, 0);
+    const monday = new Date(date);
+    monday.setDate(date.getDate() - ((date.getDay() + 6) % 7));
+
+    const week = chartWeeks.find(w => w.start.getTime() === monday.getTime());
+    if (week) week.seconds += Number(a.elapsed_time || 0);
+  });
+
+  const maxHours = Math.max(
+    1,
+    ...chartWeeks.map(w => w.seconds / 3600)
+  );
+
+  if (chart) {
+    chart.innerHTML = `
+      <div style="display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;align-items:end;height:170px">
+        ${chartWeeks.map(w => {
+          const hours = w.seconds / 3600;
+          const height = Math.max(3, hours / maxHours * 125);
+          const label = w.start.toLocaleDateString("sv-SE", { day: "numeric", month: "numeric" });
+          return `
+            <div style="text-align:center;min-width:0">
+              <div style="font-size:10px;margin-bottom:5px">${hours.toFixed(1)} h</div>
+              <div style="height:130px;display:flex;align-items:end">
+                <div style="height:${height}px;width:100%;background:linear-gradient(180deg,#ff9b45,#f26b21);border-radius:5px 5px 0 0"></div>
+              </div>
+              <div style="font-size:9px;margin-top:6px;color:var(--muted)">${label}</div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    `;
+  }
+
 }
 async function loadActivities(){
  const msg=document.getElementById("message");
